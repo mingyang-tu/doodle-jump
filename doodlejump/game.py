@@ -1,6 +1,7 @@
 import pygame
 import os
 from .constants import *
+from .sprites import Doodle
 
 
 def load_assets(assets_root):
@@ -8,6 +9,7 @@ def load_assets(assets_root):
     assets["background"] = pygame.image.load(os.path.join(assets_root, "background.png")).convert()
     assets["green_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "green.png")).convert_alpha()
     assets["blue_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "blue.png")).convert_alpha()
+    assets["doodle"] = pygame.image.load(os.path.join(assets_root, "doodle.png")).convert_alpha()
 
     return assets
 
@@ -20,6 +22,11 @@ def start_game(assets_root="./doodlejump/assets/"):
 
     assets = load_assets(assets_root)
 
+    all_sprites = pygame.sprite.Group()
+
+    doodle = Doodle(assets["doodle"])
+    all_sprites.add(doodle)
+
     running = True
 
     while running:
@@ -30,9 +37,11 @@ def start_game(assets_root="./doodlejump/assets/"):
                 running = False
 
         # 更新遊戲
+        all_sprites.update()
 
         # 畫面顯示
         screen.blit(assets["background"], (0, 0))
+        all_sprites.draw(screen)
         pygame.display.update()
 
 
