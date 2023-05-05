@@ -6,6 +6,8 @@ from .constants import *
 def load_assets(assets_root):
     assets = dict()
     assets["background"] = pygame.image.load(os.path.join(assets_root, "background.png")).convert()
+    assets["green_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "green.png")).convert_alpha()
+    assets["blue_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "blue.png")).convert_alpha()
 
     return assets
 
