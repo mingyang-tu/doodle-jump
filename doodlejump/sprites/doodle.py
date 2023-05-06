@@ -40,7 +40,10 @@ class Doodle(pygame.sprite.Sprite):
             self.rect.right = 0
 
         if self.rect.bottom >= HEIGHT:
-            self.speed_y = self.jump_speed
+            self.jump()
+
+    def jump(self):
+        self.speed_y = self.jump_speed
 
     def flip_lr(self, flip_direction):
         if flip_direction != self.direction:
