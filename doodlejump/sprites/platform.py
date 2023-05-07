@@ -12,8 +12,8 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.layer = 0
 
-        self.rect.centerx = random.randrange(0, WIDTH)
-        self.rect.centery = random.randrange(*y_range)
+        self.rect.centerx = random.randint(0, WIDTH)
+        self.rect.centery = random.randint(*y_range)
 
         if random.random() >= 0.5:
             self.speed_x = BLUE_SPEED
