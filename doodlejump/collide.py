@@ -3,7 +3,9 @@ from .constants import *
 
 
 def jump_platform(doodle, platform_sprites):
-    if doodle.speed_y > JUMP_THRESHOLD:
+    if doodle.speed_y > 0:
         hits = pygame.sprite.spritecollide(doodle, platform_sprites, False)
-        if hits:
-            doodle.jump()
+        for hit in hits:
+            if doodle.rect.centery < hit.rect.top:
+                doodle.jump()
+                return

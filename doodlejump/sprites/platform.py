@@ -15,13 +15,18 @@ class Platform(pygame.sprite.Sprite):
         self.rect.centerx = random.randrange(0, WIDTH)
         self.rect.centery = random.randrange(*y_range)
 
-        SPEEDS = list(range(-5, -1)) + list(range(2, 6))
-        self.speed_x = random.choice(SPEEDS)
+        if random.random() >= 0.5:
+            self.speed_x = BLUE_SPEED
+        else:
+            self.speed_x = -BLUE_SPEED
 
     def update(self):
         if self.type == "blue":
             self.rect.x += self.speed_x
-            if self.rect.left <= 0 or self.rect.right >= WIDTH:
-                self.speed_x = -self.speed_x
+            if self.rect.left <= 0:
+                self.speed_x = BLUE_SPEED
+            elif self.rect.right >= WIDTH:
+                self.speed_x = -BLUE_SPEED
+                
         if self.rect.top > HEIGHT:
             self.kill()
