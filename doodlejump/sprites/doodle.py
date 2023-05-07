@@ -40,7 +40,6 @@ class Doodle(pygame.sprite.Sprite):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = 0
 
-
     def jump(self):
         self.speed_y = self.jump_speed
 

@@ -27,6 +27,6 @@ class Platform(pygame.sprite.Sprite):
                 self.speed_x = BLUE_SPEED
             elif self.rect.right >= WIDTH:
                 self.speed_x = -BLUE_SPEED
-                
+
         if self.rect.top > HEIGHT:
             self.kill()

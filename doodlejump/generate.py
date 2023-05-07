@@ -4,6 +4,15 @@ from .constants import *
 from .sprites.platform import Platform
 
 
+def draw_text(surf, font_name, text, size, color, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.left = x
+    text_rect.top = y
+    surf.blit(text_surface, text_rect)
+
+
 def generate_init_platform(assets, sprites):
     space = WIDTH / 9
     for i in range(5):
@@ -14,14 +23,17 @@ def generate_init_platform(assets, sprites):
             sprite.add(platform)
 
 
-def generate_platform(assets, sprites, y_range, difficulty=None):
-    if difficulty is None:
-        difficulty = random.randint(2, 4)
-
+def generate_platform(assets, sprites, y_range, difficulty):
     if difficulty > 1:
-        blue_prob = random.choice([0.2, 0.4, 0.6, 0.8, 1])
+        if random.random() > 0.9 or difficulty == 5:
+            blue_prob = 1.
+        else:
+            blue_prob = BLUE_PROB
     else:
         blue_prob = 0.
+
+    if difficulty > 4:
+        difficulty = random.randint(2, 4)
 
     platforms = {"green": assets["green_pf"], "blue": assets["blue_pf"]}
 
@@ -34,4 +46,3 @@ def generate_platform(assets, sprites, y_range, difficulty=None):
             platform = Platform(platforms[pf], (i-100, i), pf)
             for sprite in sprites:
                 sprite.add(platform)
-
