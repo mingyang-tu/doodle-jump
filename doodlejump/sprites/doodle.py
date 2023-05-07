@@ -10,6 +10,7 @@ class Doodle(pygame.sprite.Sprite):
         self.image = self.images[0]
 
         self.rect = self.image.get_rect()
+        self.layer = 10
 
         self.rect.center = (WIDTH // 2, HEIGHT // 2)
 

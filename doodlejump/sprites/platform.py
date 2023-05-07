@@ -10,6 +10,7 @@ class Platform(pygame.sprite.Sprite):
         self.type = type
 
         self.rect = self.image.get_rect()
+        self.layer = 0
 
         self.rect.centerx = random.randrange(0, WIDTH)
         self.rect.centery = random.randrange(*y_range)
@@ -20,9 +21,7 @@ class Platform(pygame.sprite.Sprite):
     def update(self):
         if self.type == "blue":
             self.rect.x += self.speed_x
-            if self.rect.right < 0:
-                self.rect.left = WIDTH
-            if self.rect.left > WIDTH:
-                self.rect.right = 0
+            if self.rect.left <= 0 or self.rect.right >= WIDTH:
+                self.speed_x = -self.speed_x
         if self.rect.top > HEIGHT:
             self.kill()

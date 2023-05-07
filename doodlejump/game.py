@@ -24,7 +24,7 @@ def start_game(assets_root="./doodlejump/assets/"):
 
     assets = load_assets(assets_root)
 
-    all_sprites = pygame.sprite.Group()
+    all_sprites = pygame.sprite.LayeredUpdates()
     platform_sprites = pygame.sprite.Group()
 
     doodle = Doodle(assets["doodle"])
