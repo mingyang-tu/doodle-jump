@@ -17,6 +17,8 @@ def load_assets(assets_root):
     assets["green_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "green.png")).convert_alpha()
     assets["blue_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "blue.png")).convert_alpha()
     assets["doodle"] = pygame.image.load(os.path.join(assets_root, "doodle.png")).convert_alpha()
+    assets["button"] = pygame.image.load(os.path.join(assets_root, "button.png")).convert_alpha()
+    assets["selected_button"] = pygame.image.load(os.path.join(assets_root, "selected_button.png")).convert_alpha()
 
     assets["font"] = os.path.join(assets_root, "Gochi_Hand", "GochiHand-Regular.ttf")
 
@@ -85,5 +87,4 @@ def start_game(assets_root="./doodlejump/assets/"):
         draw_text(screen, assets["font"], str(score), 32, BLACK, 10, 0)
         pygame.display.update()
 
-
-pygame.quit()
+    pygame.quit()
