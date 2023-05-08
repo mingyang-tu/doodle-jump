@@ -5,7 +5,8 @@ from .sprites.doodle import Doodle
 from .generate import (
     generate_platform,
     generate_init_platform,
-    draw_text
+    draw_text,
+    game_over
 )
 from .collide import jump_platform
 
@@ -45,19 +46,25 @@ def start_game(assets_root="./doodlejump/assets/"):
     running = True
 
     while running:
+        if doodle.rect.y > HEIGHT:
+            close = game_over(screen, clock, assets, all_sprites, doodle, score)
+            if close:
+                break
+
         clock.tick(FPS)
-# get inputs
+
+    # get inputs
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-# update game
+    # update game
         all_sprites.update()
         jump_platform(doodle, platform_sprites)
 
         # move camera
         if doodle.rect.y < HALF_HEIGHT:
-            diff = (HALF_HEIGHT - doodle.rect.y) // 30 + 1
+            diff = HALF_HEIGHT - doodle.rect.y
             camera_move += diff
             score += diff
             for sprite in all_sprites:
@@ -72,7 +79,7 @@ def start_game(assets_root="./doodlejump/assets/"):
                 )
                 camera_move = 0
 
-# display
+    # display
         screen.blit(assets["background"], (0, 0))
         all_sprites.draw(screen)
         draw_text(screen, assets["font"], str(score), 32, BLACK, 10, 0)

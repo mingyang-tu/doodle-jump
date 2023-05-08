@@ -12,7 +12,7 @@ class Doodle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.layer = 10
 
-        self.rect.center = (WIDTH // 2, HEIGHT // 2)
+        self.rect.center = (HALF_WIDTH, HEIGHT*2//3)
 
         self.speed_x = MOV_SPEED
         self.speed_y = 0
