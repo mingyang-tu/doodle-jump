@@ -1,7 +1,7 @@
 import pygame
 import os
 from .constants import *
-from .sprites import Doodle
+from .sprites.doodle import Doodle
 from .generate import (
     generate_platform,
     generate_init_platform,
@@ -36,8 +36,8 @@ def start_game(assets_root="./doodlejump/assets/"):
     doodle = Doodle(assets["doodle"])
     all_sprites.add(doodle)
 
-    generate_init_platform(assets, [all_sprites, platform_sprites])
-    generate_platform(assets, [all_sprites, platform_sprites], [HEIGHT-100, -STAGE_LENGTH-100], 1)
+    generate_init_platform(assets, [all_sprites, platform_sprites], HEIGHT-50)
+    generate_platform(assets, [all_sprites, platform_sprites], [HEIGHT-100, -STAGE_LENGTH-BUFFER_LENGTH], 1)
 
     camera_move = 0
     stage = 1
@@ -67,7 +67,7 @@ def start_game(assets_root="./doodlejump/assets/"):
                 generate_platform(
                     assets,
                     [all_sprites, platform_sprites],
-                    [camera_move-STAGE_LENGTH-200, camera_move-STAGE_LENGTH*2-100],
+                    [camera_move-STAGE_LENGTH-BUFFER_LENGTH, camera_move-STAGE_LENGTH*2-BUFFER_LENGTH],
                     stage
                 )
                 camera_move = 0
