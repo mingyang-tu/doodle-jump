@@ -25,14 +25,7 @@ def load_assets(assets_root):
     return assets
 
 
-def start_game(assets_root="./doodlejump/assets/"):
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Doodle Jump")
-    clock = pygame.time.Clock()
-
-    assets = load_assets(assets_root)
-
+def init_game(assets):
     all_sprites = pygame.sprite.LayeredUpdates()
     platform_sprites = pygame.sprite.Group()
 
@@ -46,12 +39,48 @@ def start_game(assets_root="./doodlejump/assets/"):
     stage = 1
     score = 0
     running = True
+    gameover = False
+
+    return (
+        all_sprites, platform_sprites,
+        doodle,
+        camera_move, stage, score,
+        running, gameover
+    )
+
+
+def start_game(assets_root="./doodlejump/assets/"):
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Doodle Jump")
+    clock = pygame.time.Clock()
+
+    assets = load_assets(assets_root)
+
+    (
+        all_sprites, platform_sprites,
+        doodle,
+        camera_move, stage, score,
+        running, gameover
+    ) = init_game(assets)
 
     while running:
-        if doodle.rect.y > HEIGHT:
+        if gameover:
             close = game_over(screen, clock, assets, all_sprites, doodle, score)
-            if close:
+            gameover = False
+            if close == 0:
+                (
+                    all_sprites, platform_sprites,
+                    doodle,
+                    camera_move, stage, score,
+                    running, gameover
+                ) = init_game(assets)
+            elif close == 1:
+                pass
+            elif close == -1:
                 break
+            else:
+                raise ValueError("Unexpected value of [close]")
 
         clock.tick(FPS)
 
@@ -80,6 +109,9 @@ def start_game(assets_root="./doodlejump/assets/"):
                     stage
                 )
                 camera_move = 0
+
+        if doodle.rect.y > HEIGHT:
+            gameover = True
 
     # display
         screen.blit(assets["background"], (0, 0))

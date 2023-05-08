@@ -15,7 +15,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return True
+                return -1
 
         all_sprites.update()
         if camera_y > target_pos:
@@ -39,7 +39,23 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
 
     selected = 0
     texts = ["Play Again", "Menu"]
-    def _draw():
+
+    while True:
+        clock.tick(FPS)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return -1
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected -= 1
+                    selected %= len(texts)
+                elif event.key == pygame.K_DOWN:
+                    selected += 1
+                    selected %= len(texts)
+                elif event.key == pygame.K_RETURN:
+                    return selected
+
         surf.blit(assets["background"], (0, 0))
         draw_text(
             surf, assets["font"],
@@ -47,7 +63,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
             32, BLACK, HALF_WIDTH, camera_y, centerx=True
         )
         button_y = camera_y + 100
-        for i in range(2):
+        for i in range(len(texts)):
             if i == selected:
                 image = assets["selected_button"]
             else:
@@ -59,26 +75,8 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
                 24, BLACK, HALF_WIDTH, button_y, centerx=True, centery=True
             )
             button_y += 75
-
-    _draw()
-
-    pygame.display.update()
-
-    while True:
-        clock.tick(FPS)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    selected -= 1
-                elif event.key == pygame.K_DOWN:
-                    selected += 1
-                selected %= len(texts)
-        
-        _draw()
         pygame.display.update()
+
 
 def draw_button(surf, image, y):
     rect = image.get_rect()
