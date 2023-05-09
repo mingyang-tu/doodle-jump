@@ -109,7 +109,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
         )
 
     while True:
-        if doodle.rect.y > HEIGHT + 100:
+        if (doodle.rect.y > HEIGHT + 100) and (camera_y <= target_pos):
             break
         clock.tick(FPS)
 
