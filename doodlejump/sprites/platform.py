@@ -4,7 +4,7 @@ from ..constants import *
 
 
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, image, y_range, type):
+    def __init__(self, image: pygame.Surface, y_range: tuple[int, int], type: str):
         pygame.sprite.Sprite.__init__(self)
         self.image = image
         self.type = type

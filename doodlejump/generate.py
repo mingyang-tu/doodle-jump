@@ -1,17 +1,20 @@
 import pygame
 import random
+from typing import Any, Union
 from .constants import *
 from .sprites.platform import Platform
 
 
-def draw_image(surf, image, x, y):
+def draw_image(surf: pygame.Surface, image: pygame.Surface, x: int, y: int):
     rect = image.get_rect()
     rect.centerx = x
     rect.centery = y
     surf.blit(image, rect)
 
 
-def draw_text(surf, font_name, text, size, color, x, y, centerx=False, centery=False):
+def draw_text(surf: pygame.Surface, font_name: str, text: str,
+              size: int, color: tuple[int, int, int], x: int, y: int,
+              centerx: bool = False, centery: bool = False):
     font = pygame.font.Font(font_name, size)
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
@@ -26,8 +29,8 @@ def draw_text(surf, font_name, text, size, color, x, y, centerx=False, centery=F
     surf.blit(text_surface, text_rect)
 
 
-def generate_init_platform(assets, sprites, y):
-    space = WIDTH / 9
+def generate_init_platform(assets: dict, sprites: list[Union[pygame.sprite.Group, Any]], y: int):
+    space = WIDTH // 9
     for i in range(5):
         platform = Platform(assets["green_pf"], (0, HEIGHT), "green")
         platform.rect.x = i * space * 2
@@ -36,7 +39,8 @@ def generate_init_platform(assets, sprites, y):
             sprite.add(platform)
 
 
-def generate_platform(assets, sprites, y_range, difficulty):
+def generate_platform(assets: dict, sprites: list[Union[pygame.sprite.Group, Any]],
+                      y_range: tuple[int, int], difficulty: int):
     if difficulty > 1:
         if random.random() > 0.9 or difficulty == 5:
             blue_prob = 1.

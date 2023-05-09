@@ -3,7 +3,7 @@ from ..constants import *
 
 
 class Doodle(pygame.sprite.Sprite):
-    def __init__(self, image):
+    def __init__(self, image: pygame.Surface):
         pygame.sprite.Sprite.__init__(self)
         self.images = [image, pygame.transform.flip(image, True, False)]
 
@@ -33,7 +33,7 @@ class Doodle(pygame.sprite.Sprite):
             self.rect.x -= self.speed_x
 
         self.speed_y += self.acce_y
-        self.rect.y += self.speed_y
+        self.rect.y += round(self.speed_y)
 
         if self.rect.centerx < 0:
             self.rect.centerx = WIDTH
@@ -43,7 +43,7 @@ class Doodle(pygame.sprite.Sprite):
     def jump(self):
         self.speed_y = self.jump_speed
 
-    def flip_lr(self, flip_direction):
+    def flip_lr(self, flip_direction: int):
         if flip_direction != self.direction:
             self.direction = flip_direction
             self.image = self.images[self.direction]
