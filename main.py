@@ -1,3 +1,4 @@
-from doodlejump import start_game
+from doodlejump import Game
 
-start_game()
+game = Game()
+game.run()
