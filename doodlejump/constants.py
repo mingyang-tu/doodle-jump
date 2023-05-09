@@ -1,6 +1,7 @@
 # color
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+RED = (200, 0, 0)
 
 FPS = 60
 WIDTH = 400

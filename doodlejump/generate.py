@@ -8,6 +8,18 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
     drop, target_pos = HEIGHT * 2, HEIGHT // 3
     camera_y = drop + target_pos
 
+    def _draw_moving_text():
+        draw_text(
+            surf, assets["font"],
+            f"Game Over !",
+            32, RED, HALF_WIDTH, camera_y-50, centerx=True
+        )
+        draw_text(
+            surf, assets["font"],
+            f"Your score: {score}",
+            32, BLACK, HALF_WIDTH, camera_y, centerx=True
+        )
+
     while True:
         if doodle.rect.y > HEIGHT + 100:
             break
@@ -27,11 +39,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
 
         surf.blit(assets["background"], (0, 0))
         all_sprites.draw(surf)
-        draw_text(
-            surf, assets["font"],
-            f"Your score: {score}",
-            32, BLACK, HALF_WIDTH, camera_y, centerx=True
-        )
+        _draw_moving_text()
         pygame.display.update()
 
     for sprite in all_sprites:
@@ -57,11 +65,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
                     return selected
 
         surf.blit(assets["background"], (0, 0))
-        draw_text(
-            surf, assets["font"],
-            f"Your score: {score}",
-            32, BLACK, HALF_WIDTH, camera_y, centerx=True
-        )
+        _draw_moving_text()
         button_y = camera_y + 100
         for i in range(len(texts)):
             if i == selected:
@@ -77,8 +81,8 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
             button_y += 75
         draw_text(
             surf, assets["font"],
-            f"Use [up], [down], [enter] to select.",
-            18, BLACK, HALF_WIDTH , HEIGHT-50, centerx=True
+            "Use [up], [down], [enter] to select.",
+            18, BLACK, HALF_WIDTH, HEIGHT-50, centerx=True
         )
         pygame.display.update()
 
