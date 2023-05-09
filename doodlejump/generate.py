@@ -38,7 +38,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
         sprite.kill()
 
     selected = 0
-    texts = ["Play Again", "Menu"]
+    texts = ["Play Again", "Menu", "Exit"]
 
     while True:
         clock.tick(FPS)
@@ -75,6 +75,11 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
                 24, BLACK, HALF_WIDTH, button_y, centerx=True, centery=True
             )
             button_y += 75
+        draw_text(
+            surf, assets["font"],
+            f"Use [up], [down], [enter] to select.",
+            18, BLACK, HALF_WIDTH , HEIGHT-50, centerx=True
+        )
         pygame.display.update()
 
 

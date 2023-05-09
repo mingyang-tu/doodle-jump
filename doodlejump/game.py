@@ -77,7 +77,7 @@ def start_game(assets_root="./doodlejump/assets/"):
                 ) = init_game(assets)
             elif close == 1:
                 pass
-            elif close == -1:
+            elif close == -1 or close == 2:
                 break
             else:
                 raise ValueError("Unexpected value of [close]")
