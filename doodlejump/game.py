@@ -39,17 +39,7 @@ class Game:
         # initial settings
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.platform_sprites = pygame.sprite.Group()
-
         self.doodle = Doodle(self.assets["doodle"])
-        self.all_sprites.add(self.doodle)
-
-        generate_init_platform(self.assets, [self.all_sprites, self.platform_sprites], HEIGHT-50)
-        generate_platform(
-            self.assets,
-            [self.all_sprites, self.platform_sprites],
-            (HEIGHT-100, -STAGE_LENGTH-BUFFER_LENGTH),
-            1
-        )
 
         self.camera_move = 0
         self.stage = 1
