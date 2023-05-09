@@ -2,6 +2,94 @@ import pygame
 import random
 from .constants import *
 from .sprites.platform import Platform
+from .sprites.doodle import Doodle
+from .collide import jump_platform
+
+
+def menu(surf, clock, assets):
+    selected = 0
+    texts = ["Play", "Exit"]
+
+    button_x = HALF_WIDTH
+    top = 100
+
+    all_sprites = pygame.sprite.LayeredUpdates()
+    platform_sprites = pygame.sprite.Group()
+
+    doodle = Doodle(assets["doodle"])
+    doodle.rect.centerx = 75
+    all_sprites.add(doodle)
+
+    platform = Platform(assets["green_pf"], (0, HEIGHT), "green")
+    platform.rect.centerx = 75
+    platform.rect.y = HEIGHT - 100
+    all_sprites.add(platform)
+    platform_sprites.add(platform)
+
+    while True:
+        clock.tick(FPS)
+    # get inputs
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return -1
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected -= 1
+                    selected %= len(texts)
+                elif event.key == pygame.K_DOWN:
+                    selected += 1
+                    selected %= len(texts)
+                elif event.key == pygame.K_RETURN:
+                    return selected
+
+    # update game
+        all_sprites.update()
+        jump_platform(doodle, platform_sprites)
+        if doodle.rect.top > HEIGHT:
+            doodle.rect.centerx = 75
+            doodle.rect.y = 0
+
+    # display
+        surf.blit(assets["background"], (0, 0))
+
+        draw_text(
+            surf, assets["font"],
+            "Doodle Jump",
+            48, RED, HALF_WIDTH, top, centerx=True, centery=True
+        )
+
+        button_y = top + 100
+        for i in range(len(texts)):
+            if i == selected:
+                image = assets["selected_button"]
+            else:
+                image = assets["button"]
+            draw_image(surf, image, button_x, button_y)
+            draw_text(
+                surf, assets["font"],
+                texts[i],
+                24, BLACK, button_x, button_y, centerx=True, centery=True
+            )
+            button_y += 75
+
+        draw_text(
+            surf, assets["font"],
+            "[left], [right]: move doodle",
+            18, BLACK, HALF_WIDTH, button_y, centerx=True
+        )
+        draw_text(
+            surf, assets["font"],
+            "[space]: shoot bullet",
+            18, BLACK, HALF_WIDTH, button_y+50, centerx=True
+        )
+        draw_text(
+            surf, assets["font"],
+            "Use [up], [down], [enter] to select.",
+            18, BLACK, HALF_WIDTH, HEIGHT-50, centerx=True
+        )
+
+        all_sprites.draw(surf)
+        pygame.display.update()
 
 
 def game_over(surf, clock, assets, all_sprites, doodle, score):
@@ -11,7 +99,7 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
     def _draw_moving_text():
         draw_text(
             surf, assets["font"],
-            f"Game Over !",
+            "Game Over !",
             32, RED, HALF_WIDTH, camera_y-50, centerx=True
         )
         draw_text(
@@ -48,6 +136,8 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
     selected = 0
     texts = ["Play Again", "Menu", "Exit"]
 
+    button_x = HALF_WIDTH
+
     while True:
         clock.tick(FPS)
 
@@ -72,11 +162,11 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
                 image = assets["selected_button"]
             else:
                 image = assets["button"]
-            draw_button(surf, image, button_y)
+            draw_image(surf, image, button_x, button_y)
             draw_text(
                 surf, assets["font"],
                 texts[i],
-                24, BLACK, HALF_WIDTH, button_y, centerx=True, centery=True
+                24, BLACK, button_x, button_y, centerx=True, centery=True
             )
             button_y += 75
         draw_text(
@@ -87,9 +177,9 @@ def game_over(surf, clock, assets, all_sprites, doodle, score):
         pygame.display.update()
 
 
-def draw_button(surf, image, y):
+def draw_image(surf, image, x, y):
     rect = image.get_rect()
-    rect.centerx = HALF_WIDTH
+    rect.centerx = x
     rect.centery = y
     surf.blit(image, rect)
 

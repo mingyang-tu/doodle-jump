@@ -6,7 +6,8 @@ from .generate import (
     generate_platform,
     generate_init_platform,
     draw_text,
-    game_over
+    game_over,
+    menu
 )
 from .collide import jump_platform
 
@@ -40,12 +41,13 @@ def init_game(assets):
     score = 0
     running = True
     gameover = False
+    showmenu = False
 
     return (
         all_sprites, platform_sprites,
         doodle,
         camera_move, stage, score,
-        running, gameover
+        running, gameover, showmenu
     )
 
 
@@ -61,8 +63,10 @@ def start_game(assets_root="./doodlejump/assets/"):
         all_sprites, platform_sprites,
         doodle,
         camera_move, stage, score,
-        running, gameover
+        running, gameover, showmenu
     ) = init_game(assets)
+
+    showmenu = True
 
     while running:
         if gameover:
@@ -73,11 +77,25 @@ def start_game(assets_root="./doodlejump/assets/"):
                     all_sprites, platform_sprites,
                     doodle,
                     camera_move, stage, score,
-                    running, gameover
+                    running, gameover, showmenu
                 ) = init_game(assets)
             elif close == 1:
-                pass
+                showmenu = True
             elif close == -1 or close == 2:
+                break
+            else:
+                raise ValueError("Unexpected value of [close]")
+
+        if showmenu:
+            close = menu(screen, clock, assets)
+            if close == 0:
+                (
+                    all_sprites, platform_sprites,
+                    doodle,
+                    camera_move, stage, score,
+                    running, gameover, showmenu
+                ) = init_game(assets)
+            elif close == -1 or close == 1:
                 break
             else:
                 raise ValueError("Unexpected value of [close]")
