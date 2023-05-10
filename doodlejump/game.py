@@ -4,6 +4,7 @@ from .constants import *
 from .sprites.doodle import Doodle
 from .pages.game_over import game_over
 from .pages.menu import menu
+from .pages.pause import pause
 from .generate import (
     generate_platform,
     generate_init_platform,
@@ -15,6 +16,8 @@ from .collide import jump_platform
 def load_assets(assets_root):
     assets = dict()
     assets["background"] = pygame.image.load(os.path.join(assets_root, "background.png")).convert()
+    assets["transparent_bg"] = assets["background"].copy()
+    assets["transparent_bg"].set_alpha(200)
     assets["green_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "green.png")).convert_alpha()
     assets["blue_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "blue.png")).convert_alpha()
     assets["doodle"] = pygame.image.load(os.path.join(assets_root, "doodle.png")).convert_alpha()
@@ -105,9 +108,23 @@ class Game:
             self.clock.tick(FPS)
 
         # get inputs
+            flag = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        close = pause(self.screen, self.clock, self.assets, self.all_sprites, self.score)
+                        if close == 0:
+                            pass
+                        elif close == 1:
+                            self.showmenu = True
+                        elif close == -1:
+                            flag = True
+                        else:
+                            raise ValueError("Unexpected value of [close]")
+            if flag:
+                break
 
         # update game
             self.all_sprites.update()

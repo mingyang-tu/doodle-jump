@@ -9,6 +9,7 @@ from ..collide import jump_platform
 def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
     selected = 0
     texts = ["Play", "Exit"]
+    tutorial = ["[left], [right]: move doodle", "[space]: shoot bullet", "[p]: pause the game"]
 
     all_sprites = pygame.sprite.LayeredUpdates()
     platform_sprites = pygame.sprite.Group()
@@ -72,16 +73,14 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
             )
             button_y += 75
 
-        draw_text(
-            surf, assets["font"],
-            "[left], [right]: move doodle",
-            18, BLACK, HALF_WIDTH, button_y, centerx=True
-        )
-        draw_text(
-            surf, assets["font"],
-            "[space]: shoot bullet",
-            18, BLACK, HALF_WIDTH, button_y+50, centerx=True
-        )
+        for text in tutorial:
+            draw_text(
+                surf, assets["font"],
+                text,
+                18, BLACK, HALF_WIDTH, button_y, centerx=True
+            )
+            button_y += 30
+
         draw_text(
             surf, assets["font"],
             "Use [up], [down], [enter] to select.",
