@@ -2,7 +2,7 @@ import pygame
 import random
 from typing import Any, Union
 from .constants import *
-from .sprites.platform import Platform
+from .sprites.platform import Platform, Spring
 
 
 def draw_image(surf: pygame.Surface, image: pygame.Surface, x: int, y: int):
@@ -42,7 +42,7 @@ def generate_init_platform(assets: dict, sprites: list[Union[pygame.sprite.Group
 def generate_platform(assets: dict, sprites: list[Union[pygame.sprite.Group, Any]],
                       y_range: tuple[int, int], difficulty: int):
     if difficulty > 1:
-        if random.random() > 0.9 or difficulty == 5:
+        if random.random() < ALL_BLUE_PROB or difficulty == 5:
             blue_prob = 1.
         else:
             blue_prob = BLUE_PROB
@@ -51,6 +51,11 @@ def generate_platform(assets: dict, sprites: list[Union[pygame.sprite.Group, Any
 
     if difficulty > 4:
         difficulty = random.randint(2, 4)
+
+    if difficulty == 1:
+        spring_prob = SPRING_PROB / 2
+    else:
+        spring_prob = SPRING_PROB
 
     platforms = {"green": assets["green_pf"], "blue": assets["blue_pf"]}
 
@@ -64,3 +69,14 @@ def generate_platform(assets: dict, sprites: list[Union[pygame.sprite.Group, Any
             platform = Platform(platforms[pf], (min_i, i), pf)
             for sprite in sprites:
                 sprite.add(platform)
+            if random.random() < spring_prob:
+                position = random.randint(platform.rect.left+10, platform.rect.right-10), platform.rect.top+1
+                spring = Spring(
+                    assets["spring"],
+                    assets["compressed_spring"],
+                    position,
+                    (platform.rect.left, platform.rect.right),
+                    platform.speed_x if platform.type == "blue" else 0
+                )
+                for sprite in sprites:
+                    sprite.add(spring)

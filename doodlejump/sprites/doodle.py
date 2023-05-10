@@ -43,6 +43,9 @@ class Doodle(pygame.sprite.Sprite):
     def jump(self):
         self.speed_y = self.jump_speed
 
+    def jump_spring(self):
+        self.speed_y = self.jump_speed * 1.5
+
     def flip_lr(self, flip_direction: int):
         if flip_direction != self.direction:
             self.direction = flip_direction

@@ -24,6 +24,9 @@ def load_assets(assets_root):
     assets["button"] = pygame.image.load(os.path.join(assets_root, "buttons", "button.png")).convert_alpha()
     assets["selected_button"] = pygame.image.load(os.path.join(
         assets_root, "buttons", "selected_button.png")).convert_alpha()
+    assets["spring"] = pygame.image.load(os.path.join(assets_root, "springs", "spring.png")).convert_alpha()
+    assets["compressed_spring"] = pygame.image.load(os.path.join(
+        assets_root, "springs", "compressed_spring.png")).convert_alpha()
 
     assets["font"] = os.path.join(assets_root, "Gochi_Hand", "GochiHand-Regular.ttf")
 
