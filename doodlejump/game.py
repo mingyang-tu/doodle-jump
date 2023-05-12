@@ -27,6 +27,7 @@ def load_assets(assets_root):
     assets["spring"] = pygame.image.load(os.path.join(assets_root, "springs", "spring.png")).convert_alpha()
     assets["compressed_spring"] = pygame.image.load(os.path.join(
         assets_root, "springs", "compressed_spring.png")).convert_alpha()
+    assets["bullet"] = pygame.image.load(os.path.join(assets_root, "bullet.png")).convert_alpha()
 
     assets["font"] = os.path.join(assets_root, "Gochi_Hand", "GochiHand-Regular.ttf")
 
@@ -126,6 +127,8 @@ class Game:
                             flag = True
                         else:
                             raise ValueError("Unexpected value of [close]")
+                    elif event.key == pygame.K_SPACE:
+                        self.doodle.shoot(self.assets["bullet"], [self.all_sprites])
             if flag:
                 break
 

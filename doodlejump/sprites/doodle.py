@@ -1,4 +1,5 @@
 import pygame
+from typing import Any, Union
 from ..constants import *
 
 
@@ -46,7 +47,30 @@ class Doodle(pygame.sprite.Sprite):
     def jump_spring(self):
         self.speed_y = self.jump_speed * 1.5
 
+    def shoot(self, img_bullet: pygame.Surface, sprites: list[Union[pygame.sprite.Group, Any]]):
+        bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top)
+        for sprite in sprites:
+            sprite.add(bullet)
+
     def flip_lr(self, flip_direction: int):
         if flip_direction != self.direction:
             self.direction = flip_direction
             self.image = self.images[self.direction]
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, image: pygame.Surface, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = y
+
+        self.layer = 9
+
+        self.speed_y = -BULLET_SPEED
+
+    def update(self):
+        self.rect.y += self.speed_y
+        if self.rect.bottom < 0:
+            self.kill()
