@@ -20,7 +20,8 @@ def load_assets(assets_root):
     assets["transparent_bg"].set_alpha(200)
     assets["green_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "green.png")).convert_alpha()
     assets["blue_pf"] = pygame.image.load(os.path.join(assets_root, "platforms", "blue.png")).convert_alpha()
-    assets["doodle"] = pygame.image.load(os.path.join(assets_root, "doodle.png")).convert_alpha()
+    assets["doodle"] = pygame.image.load(os.path.join(assets_root, "doodles", "doodle.png")).convert_alpha()
+    assets["doodle_shoot"] = pygame.image.load(os.path.join(assets_root, "doodles", "doodle_shoot.png")).convert_alpha()
     assets["button"] = pygame.image.load(os.path.join(assets_root, "buttons", "button.png")).convert_alpha()
     assets["selected_button"] = pygame.image.load(os.path.join(
         assets_root, "buttons", "selected_button.png")).convert_alpha()
@@ -46,7 +47,7 @@ class Game:
         # initial settings
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.platform_sprites = pygame.sprite.Group()
-        self.doodle = Doodle(self.assets["doodle"])
+        self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
 
         self.camera_move = 0
         self.stage = 1
@@ -59,7 +60,7 @@ class Game:
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.platform_sprites = pygame.sprite.Group()
 
-        self.doodle = Doodle(self.assets["doodle"])
+        self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
         self.all_sprites.add(self.doodle)
 
         generate_init_platform(self.assets, [self.all_sprites, self.platform_sprites], HEIGHT-50)

@@ -14,7 +14,7 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
     all_sprites = pygame.sprite.LayeredUpdates()
     platform_sprites = pygame.sprite.Group()
 
-    doodle = Doodle(assets["doodle"])
+    doodle = Doodle(assets["doodle"], assets["doodle_shoot"])
     doodle.rect.centerx = 75
     all_sprites.add(doodle)
 

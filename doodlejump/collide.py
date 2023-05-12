@@ -10,8 +10,7 @@ def jump_platform(doodle: Doodle, platform_sprites: pygame.sprite.Group):
             if doodle.rect.bottom < hit.rect.bottom:
                 if hit.layer == 0:
                     doodle.jump_spring()
-                    hit.image = hit.uncompressed
-                    hit.relocate()
+                    hit.relocate(hit.uncompressed)
                 elif hit.layer == 1:
                     doodle.jump()
                 return

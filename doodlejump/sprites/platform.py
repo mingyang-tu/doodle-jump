@@ -54,7 +54,8 @@ class Spring(pygame.sprite.Sprite):
         self.blue_speed = abs(speed_x)
         self.speed_x = speed_x
 
-    def relocate(self):
+    def relocate(self, image: pygame.Surface):
+        self.image = image
         new_pos = self.rect.centerx, self.rect.bottom
         self.rect = self.image.get_rect()
         self.rect.centerx = new_pos[0]
