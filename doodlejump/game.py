@@ -8,9 +8,14 @@ from .pages.pause import pause
 from .generate import (
     generate_platform,
     generate_init_platform,
+    generate_monster,
     draw_text
 )
-from .collide import jump_platform
+from .collide import (
+    jump_platform,
+    touch_monster,
+    kill_monster
+)
 
 
 def load_assets(assets_root):
@@ -51,6 +56,8 @@ class Game:
         # initial settings
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.platform_sprites = pygame.sprite.Group()
+        self.bullet_sprites = pygame.sprite.Group()
+        self.monster_sprites = pygame.sprite.Group()
         self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
 
         self.camera_move = 0
@@ -63,6 +70,8 @@ class Game:
     def init_game(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.platform_sprites = pygame.sprite.Group()
+        self.bullet_sprites = pygame.sprite.Group()
+        self.monster_sprites = pygame.sprite.Group()
 
         self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
         self.all_sprites.add(self.doodle)
@@ -73,6 +82,11 @@ class Game:
             [self.all_sprites, self.platform_sprites],
             (HEIGHT-100, -STAGE_LENGTH-BUFFER_LENGTH),
             1
+        )
+        generate_monster(
+            self.assets,
+            [self.all_sprites, self.monster_sprites],
+            (-STAGE_LENGTH-BUFFER_LENGTH+MONSTER_SPACE, -STAGE_LENGTH-BUFFER_LENGTH)
         )
 
         self.camera_move = 0
@@ -133,13 +147,20 @@ class Game:
                         else:
                             raise ValueError("Unexpected value of [close]")
                     elif event.key == pygame.K_SPACE:
-                        self.doodle.shoot(self.assets["bullet"], [self.all_sprites])
+                        self.doodle.shoot(self.assets["bullet"], [self.all_sprites, self.bullet_sprites])
             if flag:
                 break
 
         # update game
             self.all_sprites.update()
             jump_platform(self.doodle, self.platform_sprites)
+            self.score += kill_monster(self.monster_sprites, self.bullet_sprites)
+            if touch_monster(self.doodle, self.monster_sprites):
+                self.doodle.speed_y = TOUCH_AND_DIE_SPEED
+                self.gameover = True
+
+            if self.doodle.rect.y > HEIGHT:
+                self.gameover = True
 
             # move camera
             if self.doodle.rect.bottom < HALF_HEIGHT:
@@ -157,10 +178,12 @@ class Game:
                         (bot, bot-STAGE_LENGTH),
                         self.stage
                     )
+                    generate_monster(
+                        self.assets,
+                        [self.all_sprites, self.monster_sprites],
+                        (bot, bot-STAGE_LENGTH)
+                    )
                     self.camera_move = 0
-
-            if self.doodle.rect.y > HEIGHT:
-                self.gameover = True
 
         # display
             self.screen.blit(self.assets["background"], (0, 0))

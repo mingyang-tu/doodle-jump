@@ -14,6 +14,8 @@ class Doodle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.layer = 10
 
+        self.radius = self.rect.height // 2
+
         self.rect.center = (HALF_WIDTH, HEIGHT*2//3)
 
         self.speed_x = MOV_SPEED
@@ -32,7 +34,7 @@ class Doodle(pygame.sprite.Sprite):
         if self.shooting and now - self.shoot_time > SHOOT_TIME:
             shift = SHOOT_SHIFT if self.direction == 0 else -SHOOT_SHIFT
             self.relocate(
-                self.images[self.direction], 
+                self.images[self.direction],
                 self.rect.centerx+shift, self.rect.bottom
             )
             self.shooting = False
@@ -98,6 +100,8 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.bottom = y
 
         self.layer = 9
+
+        self.radius = self.rect.height // 2
 
         self.speed_y = -BULLET_SPEED
 
