@@ -29,6 +29,10 @@ def load_assets(assets_root):
     assets["compressed_spring"] = pygame.image.load(os.path.join(
         assets_root, "springs", "compressed_spring.png")).convert_alpha()
     assets["bullet"] = pygame.image.load(os.path.join(assets_root, "bullet.png")).convert_alpha()
+    assets["monsters"] = [
+        pygame.image.load(os.path.join(assets_root, "monsters", f"monster{i}.png")).convert_alpha()
+        for i in range(1, 4)
+    ]
 
     assets["font"] = os.path.join(assets_root, "Gochi_Hand", "GochiHand-Regular.ttf")
 
@@ -138,8 +142,8 @@ class Game:
             jump_platform(self.doodle, self.platform_sprites)
 
             # move camera
-            if self.doodle.rect.y < HALF_HEIGHT:
-                diff = HALF_HEIGHT - self.doodle.rect.y
+            if self.doodle.rect.bottom < HALF_HEIGHT:
+                diff = HALF_HEIGHT - self.doodle.rect.bottom
                 self.camera_move += diff
                 self.score += diff
                 for sprite in self.all_sprites:
