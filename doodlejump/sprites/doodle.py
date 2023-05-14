@@ -8,6 +8,7 @@ class Doodle(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.images = [image, pygame.transform.flip(image, True, False)]
         self.imgs_shoot = [img_shoot, pygame.transform.flip(img_shoot, True, False)]
+        self.imgs_dead = [pygame.transform.flip(image, False, True), pygame.transform.flip(image, True, True)]
 
         self.image = self.images[0]
 
@@ -28,6 +29,8 @@ class Doodle(pygame.sprite.Sprite):
 
         self.shoot_time = 0
         self.shooting = False
+
+        self.dead = False
 
     def update(self):
         now = pygame.time.get_ticks()
@@ -76,10 +79,17 @@ class Doodle(pygame.sprite.Sprite):
         self.shoot_time = pygame.time.get_ticks()
         self.shooting = True
 
+    def touch_monster(self):
+        self.dead = True
+        self.speed_y = 0
+        self.image = self.imgs_dead[self.direction]
+
     def flip_lr(self, flip_direction: int):
         if flip_direction != self.direction:
             self.direction = flip_direction
-            if self.shooting:
+            if self.dead:
+                self.image = self.imgs_dead[self.direction]
+            elif self.shooting:
                 self.image = self.imgs_shoot[self.direction]
             else:
                 self.image = self.images[self.direction]

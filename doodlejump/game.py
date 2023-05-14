@@ -66,6 +66,7 @@ class Game:
         self.running = True
         self.gameover = False
         self.showmenu = False
+        self.touch_monster = False
 
     def init_game(self):
         self.all_sprites = pygame.sprite.LayeredUpdates()
@@ -95,6 +96,7 @@ class Game:
         self.running = True
         self.gameover = False
         self.showmenu = False
+        self.touch_monster = False
 
     def run(self):
         self.showmenu = True
@@ -146,18 +148,19 @@ class Game:
                             flag = True
                         else:
                             raise ValueError("Unexpected value of [close]")
-                    elif event.key == pygame.K_SPACE:
+                    elif event.key == pygame.K_SPACE and not self.touch_monster:
                         self.doodle.shoot(self.assets["bullet"], [self.all_sprites, self.bullet_sprites])
             if flag:
                 break
 
         # update game
             self.all_sprites.update()
-            jump_platform(self.doodle, self.platform_sprites)
-            self.score += kill_monster(self.monster_sprites, self.bullet_sprites)
-            if touch_monster(self.doodle, self.monster_sprites):
-                self.doodle.speed_y = TOUCH_AND_DIE_SPEED
-                self.gameover = True
+
+            if not self.touch_monster:
+                jump_platform(self.doodle, self.platform_sprites)
+                self.score += kill_monster(self.monster_sprites, self.bullet_sprites)
+                if touch_monster(self.doodle, self.monster_sprites):
+                    self.touch_monster = True
 
             if self.doodle.rect.y > HEIGHT:
                 self.gameover = True
