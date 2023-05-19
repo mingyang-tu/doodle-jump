@@ -1,5 +1,6 @@
 import pygame
 from ..constants import *
+from ..keys import *
 from ..generate import draw_text, draw_image
 from ..sprites.platform import Platform
 from ..sprites.doodle import Doodle
@@ -34,13 +35,13 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
             if event.type == pygame.QUIT:
                 return -1
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == K_UP:
                     selected -= 1
                     selected %= len(texts)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == K_DOWN:
                     selected += 1
                     selected %= len(texts)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == K_RETURN:
                     return selected
 
     # update game

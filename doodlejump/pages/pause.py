@@ -1,5 +1,6 @@
 import pygame
 from ..constants import *
+from ..keys import *
 from ..generate import draw_text, draw_image
 
 
@@ -17,15 +18,15 @@ def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_spri
             if event.type == pygame.QUIT:
                 return -1
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == K_UP:
                     selected -= 1
                     selected %= len(texts)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == K_DOWN:
                     selected += 1
                     selected %= len(texts)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == K_RETURN:
                     return selected
-                elif event.key == pygame.K_p:
+                elif event.key == K_PAUSE:
                     return 0
 
         all_sprites.draw(surf)

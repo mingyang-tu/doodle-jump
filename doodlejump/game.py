@@ -1,6 +1,7 @@
 import pygame
 import os
 from .constants import *
+from .keys import *
 from .sprites.doodle import Doodle
 from .pages.game_over import game_over
 from .pages.menu import menu
@@ -138,7 +139,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
+                    if event.key == K_PAUSE:
                         close = pause(self.screen, self.clock, self.assets, self.all_sprites, self.score)
                         if close == 0:
                             pass
@@ -148,7 +149,7 @@ class Game:
                             flag = True
                         else:
                             raise ValueError("Unexpected value of [close]")
-                    elif event.key == pygame.K_SPACE and not self.touch_monster:
+                    elif event.key == K_SHOOT and not self.touch_monster:
                         self.doodle.shoot(self.assets["bullet"], [self.all_sprites, self.bullet_sprites])
             if flag:
                 break

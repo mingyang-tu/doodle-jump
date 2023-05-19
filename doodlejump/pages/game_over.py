@@ -1,5 +1,6 @@
 import pygame
 from ..constants import *
+from ..keys import *
 from ..sprites.doodle import Doodle
 from ..generate import draw_text, draw_image
 
@@ -60,13 +61,13 @@ def game_over(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict,
             if event.type == pygame.QUIT:
                 return -1
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == K_UP:
                     selected -= 1
                     selected %= len(texts)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == K_DOWN:
                     selected += 1
                     selected %= len(texts)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == K_RETURN:
                     return selected
 
         surf.blit(assets["background"], (0, 0))

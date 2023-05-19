@@ -1,6 +1,7 @@
 import pygame
 from typing import Any, Union
 from ..constants import *
+from ..keys import *
 
 
 class Doodle(pygame.sprite.Sprite):
@@ -43,10 +44,10 @@ class Doodle(pygame.sprite.Sprite):
             self.shooting = False
         key_pressed = pygame.key.get_pressed()
 
-        if key_pressed[pygame.K_RIGHT]:
+        if key_pressed[K_RIGHT]:
             self.flip_lr(0)
             self.rect.x += self.speed_x
-        if key_pressed[pygame.K_LEFT]:
+        if key_pressed[K_LEFT]:
             self.flip_lr(1)
             self.rect.x -= self.speed_x
 
