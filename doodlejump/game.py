@@ -45,7 +45,7 @@ def load_assets(assets_root):
 
 
 class Game:
-    def __init__(self, assets_root="./doodlejump/assets/"):
+    def __init__(self, assets_root=os.path.join("doodlejump", "assets")):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Doodle Jump")
