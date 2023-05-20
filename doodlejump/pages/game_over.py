@@ -33,20 +33,22 @@ def game_over(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict,
                 return -1
 
         all_sprites.update()
+        doodle.update()
         if camera_y > target_pos:
             for sprite in all_sprites:
                 sprite.rect.y -= GG_SPEED
             camera_y -= GG_SPEED
-        else:
-            doodle.rect.y -= GG_SPEED
+        doodle.rect.y -= GG_SPEED
 
         surf.blit(assets["background"], (0, 0))
         all_sprites.draw(surf)
+        doodle.draw(surf)
         _draw_moving_text()
         pygame.display.update()
 
     for sprite in all_sprites:
         sprite.kill()
+    doodle.kill()
 
     # choices
     selected = 0

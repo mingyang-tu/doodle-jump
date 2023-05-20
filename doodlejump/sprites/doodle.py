@@ -5,15 +5,15 @@ from ..keys import *
 
 
 class Doodle(pygame.sprite.Sprite):
-    def __init__(self, image: pygame.Surface, img_shoot: pygame.Surface):
+    def __init__(self, assets: dict[str, pygame.Surface]):
         pygame.sprite.Sprite.__init__(self)
-        self.images = [image, pygame.transform.flip(image, True, False)]
-        self.imgs_shoot = [img_shoot, pygame.transform.flip(img_shoot, True, False)]
-        self.imgs_dead = [pygame.transform.flip(image, False, True), pygame.transform.flip(image, True, True)]
+        self.assets = assets
+        self.images = [assets["doodle"], pygame.transform.flip(assets["doodle"], True, False)]
+        self.imgs_shoot = [assets["doodle_shoot"], pygame.transform.flip(assets["doodle_shoot"], True, False)]
+        self.imgs_dead = [pygame.transform.flip(assets["doodle"], False, True),
+                          pygame.transform.flip(assets["doodle"], True, True)]
 
-        self.image = self.images[0]
-
-        self.rect = self.image.get_rect()
+        self.rect = self.images[0].get_rect()
         self.layer = 10
 
         self.radius = self.rect.height // 2
@@ -37,18 +37,15 @@ class Doodle(pygame.sprite.Sprite):
         now = pygame.time.get_ticks()
         if self.shooting and now - self.shoot_time > SHOOT_TIME:
             shift = SHOOT_SHIFT if self.direction == 0 else -SHOOT_SHIFT
-            self.relocate(
-                self.images[self.direction],
-                self.rect.centerx+shift, self.rect.bottom
-            )
+            self.relocate(self.images[self.direction], self.rect.centerx+shift, self.rect.bottom)
             self.shooting = False
         key_pressed = pygame.key.get_pressed()
 
         if key_pressed[K_RIGHT]:
-            self.flip_lr(0)
+            self.direction = 0
             self.rect.x += self.speed_x
         if key_pressed[K_LEFT]:
-            self.flip_lr(1)
+            self.direction = 1
             self.rect.x -= self.speed_x
 
         self.speed_y += self.acce_y
@@ -59,6 +56,14 @@ class Doodle(pygame.sprite.Sprite):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = 0
 
+    def draw(self, screen: pygame.Surface):
+        if self.dead:
+            screen.blit(self.imgs_dead[self.direction], self.rect)
+        elif self.shooting:
+            screen.blit(self.imgs_shoot[self.direction], self.rect)
+        else:
+            screen.blit(self.images[self.direction], self.rect)
+
     def jump(self):
         self.speed_y = self.jump_speed
 
@@ -68,10 +73,7 @@ class Doodle(pygame.sprite.Sprite):
     def shoot(self, img_bullet: pygame.Surface, sprites: list[Union[pygame.sprite.Group, Any]]):
         if not self.shooting:
             shift = SHOOT_SHIFT if self.direction == 0 else -SHOOT_SHIFT
-            self.relocate(
-                self.imgs_shoot[self.direction],
-                self.rect.centerx-shift, self.rect.bottom
-            )
+            self.relocate(self.imgs_shoot[self.direction], self.rect.centerx-shift, self.rect.bottom)
 
         bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top)
         for sprite in sprites:
@@ -83,21 +85,9 @@ class Doodle(pygame.sprite.Sprite):
     def touch_monster(self):
         self.dead = True
         self.speed_y = 0
-        self.image = self.imgs_dead[self.direction]
-
-    def flip_lr(self, flip_direction: int):
-        if flip_direction != self.direction:
-            self.direction = flip_direction
-            if self.dead:
-                self.image = self.imgs_dead[self.direction]
-            elif self.shooting:
-                self.image = self.imgs_shoot[self.direction]
-            else:
-                self.image = self.images[self.direction]
 
     def relocate(self, image: pygame.Surface, x: int, y: int):
-        self.image = image
-        self.rect = self.image.get_rect()
+        self.rect = image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
 

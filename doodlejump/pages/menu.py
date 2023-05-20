@@ -15,9 +15,8 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
     all_sprites = pygame.sprite.LayeredUpdates()
     platform_sprites = pygame.sprite.Group()
 
-    doodle = Doodle(assets["doodle"], assets["doodle_shoot"])
+    doodle = Doodle(assets)
     doodle.rect.centerx = 75
-    all_sprites.add(doodle)
 
     platform = Platform(assets["green_pf"], (0, HEIGHT), "green")
     platform.rect.centerx = 75
@@ -46,6 +45,7 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
 
     # update game
         all_sprites.update()
+        doodle.update()
         jump_platform(doodle, platform_sprites)
         if doodle.rect.top > HEIGHT:
             doodle.rect.centerx = 75
@@ -89,4 +89,5 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
         )
 
         all_sprites.draw(surf)
+        doodle.draw(surf)
         pygame.display.update()

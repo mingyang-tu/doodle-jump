@@ -59,7 +59,7 @@ class Game:
         self.platform_sprites = pygame.sprite.Group()
         self.bullet_sprites = pygame.sprite.Group()
         self.monster_sprites = pygame.sprite.Group()
-        self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
+        self.doodle = Doodle(self.assets)
 
         self.camera_move = 0
         self.stage = 1
@@ -75,8 +75,7 @@ class Game:
         self.bullet_sprites = pygame.sprite.Group()
         self.monster_sprites = pygame.sprite.Group()
 
-        self.doodle = Doodle(self.assets["doodle"], self.assets["doodle_shoot"])
-        self.all_sprites.add(self.doodle)
+        self.doodle = Doodle(self.assets)
 
         generate_init_platform(self.assets, [self.all_sprites, self.platform_sprites], HEIGHT-50)
         generate_platform(
@@ -134,28 +133,28 @@ class Game:
             self.clock.tick(FPS)
 
         # get inputs
-            flag = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == K_PAUSE:
-                        close = pause(self.screen, self.clock, self.assets, self.all_sprites, self.score)
+                        close = pause(self.screen, self.clock, self.assets, self.all_sprites, self.doodle, self.score)
                         if close == 0:
                             pass
                         elif close == 1:
                             self.showmenu = True
                         elif close == -1:
-                            flag = True
+                            self.running = False
                         else:
                             raise ValueError("Unexpected value of [close]")
                     elif event.key == K_SHOOT and not self.touch_monster:
                         self.doodle.shoot(self.assets["bullet"], [self.all_sprites, self.bullet_sprites])
-            if flag:
+            if not self.running:
                 break
 
         # update game
             self.all_sprites.update()
+            self.doodle.update()
 
             if not self.touch_monster:
                 jump_platform(self.doodle, self.platform_sprites)
@@ -173,6 +172,7 @@ class Game:
                 self.score += diff
                 for sprite in self.all_sprites:
                     sprite.rect.y += diff
+                self.doodle.rect.y += diff
                 if self.camera_move > STAGE_LENGTH:
                     self.stage += 1
                     bot = self.camera_move-STAGE_LENGTH-BUFFER_LENGTH
@@ -192,6 +192,7 @@ class Game:
         # display
             self.screen.blit(self.assets["background"], (0, 0))
             self.all_sprites.draw(self.screen)
+            self.doodle.draw(self.screen)
             draw_text(self.screen, self.assets["font"], str(self.score), 32, BLACK, 10, 0)
             pygame.display.update()
 

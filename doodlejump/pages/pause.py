@@ -2,9 +2,10 @@ import pygame
 from ..constants import *
 from ..keys import *
 from ..generate import draw_text, draw_image
+from ..sprites.doodle import Doodle
 
 
-def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_sprites: pygame.sprite.LayeredUpdates, score: int):
+def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_sprites: pygame.sprite.LayeredUpdates, doodle: Doodle, score: int):
     selected = 0
     texts = ["Resume", "Menu"]
 
@@ -30,6 +31,7 @@ def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_spri
                     return 0
 
         all_sprites.draw(surf)
+        doodle.draw(surf)
         surf.blit(assets["transparent_bg"], (0, 0))
         draw_text(surf, assets["font"], str(score), 32, BLACK, 10, 0)
         draw_text(
