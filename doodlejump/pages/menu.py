@@ -7,7 +7,7 @@ from ..sprites.doodle import Doodle
 from ..collide import jump_platform
 
 
-def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
+def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, best_score: int):
     selected = 0
     texts = ["Play", "Exit"]
     tutorial = ["[left], [right]: move doodle", "[space]: shoot bullet", "[p]: pause the game"]
@@ -59,8 +59,13 @@ def menu(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict):
             "Doodle Jump",
             48, RED, HALF_WIDTH, text_y, centerx=True, centery=True
         )
+        draw_text(
+            surf, assets["font"],
+            f"Your high score: {best_score}",
+            24, BLACK, HALF_WIDTH, text_y+50, centerx=True, centery=True
+        )
 
-        button_y = text_y + 100
+        button_y = text_y + 120
         for i in range(len(texts)):
             if i == selected:
                 image = assets["selected_button"]

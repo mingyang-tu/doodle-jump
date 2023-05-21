@@ -6,7 +6,8 @@ from ..generate import draw_text, draw_image
 
 
 def game_over(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict,
-              all_sprites: pygame.sprite.LayeredUpdates, doodle: Doodle, score: int):
+              all_sprites: pygame.sprite.LayeredUpdates, doodle: Doodle,
+              score: int, best_score: int):
     drop, target_pos = HEIGHT * 2, HEIGHT // 3
     camera_y = drop + target_pos
 
@@ -14,12 +15,17 @@ def game_over(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict,
         draw_text(
             surf, assets["font"],
             "Game Over !",
-            32, RED, HALF_WIDTH, camera_y-50, centerx=True
+            48, RED, HALF_WIDTH, camera_y-100, centerx=True
         )
         draw_text(
             surf, assets["font"],
             f"Your score: {score}",
-            32, BLACK, HALF_WIDTH, camera_y, centerx=True
+            24, BLACK, HALF_WIDTH, camera_y-30, centerx=True
+        )
+        draw_text(
+            surf, assets["font"],
+            f"Your high score: {best_score}",
+            24, BLACK, HALF_WIDTH, camera_y, centerx=True
         )
 
     # dropping animation

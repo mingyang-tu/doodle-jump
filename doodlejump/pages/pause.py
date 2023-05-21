@@ -5,7 +5,8 @@ from ..generate import draw_text, draw_image
 from ..sprites.doodle import Doodle
 
 
-def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_sprites: pygame.sprite.LayeredUpdates, doodle: Doodle, score: int):
+def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_sprites: pygame.sprite.LayeredUpdates, doodle: Doodle,
+          score: int, best_score: int):
     selected = 0
     texts = ["Resume", "Menu"]
 
@@ -34,6 +35,8 @@ def pause(surf: pygame.Surface, clock: pygame.time.Clock, assets: dict, all_spri
         doodle.draw(surf)
         surf.blit(assets["transparent_bg"], (0, 0))
         draw_text(surf, assets["font"], str(score), 32, BLACK, 10, 0)
+        if best_score > 0 and score > best_score:
+            draw_text(surf, assets["font"], "Best Score !!!", 18, RED, 10, 30)
         draw_text(
             surf, assets["font"],
             "Paused",

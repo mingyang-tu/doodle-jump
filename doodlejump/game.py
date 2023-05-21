@@ -53,6 +53,13 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.assets = load_assets(assets_root)
+        self.best_score_path = os.path.join(assets_root, "best_score.txt")
+        if not os.path.exists(self.best_score_path):
+            with open(self.best_score_path, 'w') as f:
+                f.write("0")
+        with open(self.best_score_path) as f:
+            lines = f.readlines()
+            self.best_score = int(lines[0])
 
         # initial settings
         self.all_sprites = pygame.sprite.LayeredUpdates()
@@ -104,12 +111,9 @@ class Game:
         while self.running:
             if self.gameover:
                 close = game_over(
-                    self.screen,
-                    self.clock,
-                    self.assets,
-                    self.all_sprites,
-                    self.doodle,
-                    self.score
+                    self.screen, self.clock, self.assets,
+                    self.all_sprites, self.doodle,
+                    self.score, self.best_score
                 )
                 self.gameover = False
                 if close == 0:
@@ -122,7 +126,7 @@ class Game:
                     raise ValueError("Unexpected value of [close]")
 
             if self.showmenu:
-                close = menu(self.screen, self.clock, self.assets)
+                close = menu(self.screen, self.clock, self.assets, self.best_score)
                 if close == 0:
                     self.init_game()
                 elif close == -1 or close == 1:
@@ -138,7 +142,11 @@ class Game:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == K_PAUSE:
-                        close = pause(self.screen, self.clock, self.assets, self.all_sprites, self.doodle, self.score)
+                        close = pause(
+                            self.screen, self.clock, self.assets,
+                            self.all_sprites, self.doodle,
+                            self.score, self.best_score
+                        )
                         if close == 0:
                             pass
                         elif close == 1:
@@ -164,6 +172,10 @@ class Game:
 
             if self.doodle.rect.y > HEIGHT:
                 self.gameover = True
+                if self.score > self.best_score:
+                    self.best_score = self.score
+                    with open(self.best_score_path, 'w') as f:
+                        f.write(str(self.best_score))
 
             # move camera
             if self.doodle.rect.bottom < HALF_HEIGHT:
@@ -194,6 +206,8 @@ class Game:
             self.all_sprites.draw(self.screen)
             self.doodle.draw(self.screen)
             draw_text(self.screen, self.assets["font"], str(self.score), 32, BLACK, 10, 0)
+            if self.best_score > 0 and self.score > self.best_score:
+                draw_text(self.screen, self.assets["font"], "Best Score !!!", 18, RED, 10, 30)
             pygame.display.update()
 
         pygame.quit()
